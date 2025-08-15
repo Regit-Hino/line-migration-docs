@@ -1,0 +1,142 @@
+{
+  "env": {
+    "LINE_CHANNEL_ACCESS_TOKEN": "****ilFU",
+    "LINE_CHANNEL_SECRET": "****cd1d",
+    "SKIP_WEBHOOK_SIGNATURE_VERIFICATION": "true",
+    "WEBHOOK_EXTERNAL_URL": null,
+    "WEBHOOK_PATH": "/webhook",
+    "APP_PORT": "5001",
+    "LINE_BASIC_ID": null
+  },
+  "endpoints": {
+    "webhook": {
+      "method": "POST",
+      "path": "/webhook",
+      "code_refs": ["webhook_server.py:111-140"]
+    },
+    "status": {
+      "method": "GET",
+      "path": "/status",
+      "code_refs": ["webhook_server.py:247-251"]
+    },
+    "health": {
+      "method": "GET",
+      "path": "/health",
+      "code_refs": ["webhook_server.py:253-262"]
+    },
+    "reply": {
+      "url": "https://api.line.me/v2/bot/message/reply"
+    },
+    "push": {
+      "url": "https://api.line.me/v2/bot/message/push"
+    },
+    "multicast": {
+      "url": "https://api.line.me/v2/bot/message/multicast"
+    },
+    "broadcast": {
+      "url": "https://api.line.me/v2/bot/message/broadcast"
+    }
+  },
+  "webhook": {
+    "signature_verification": {
+      "enabled": true,
+      "skippable": true,
+      "env_flag": "SKIP_WEBHOOK_SIGNATURE_VERIFICATION",
+      "code_refs": ["webhook_server.py:97-109", "admin/.env:6"]
+    },
+    "log_file": "webhook_server.log"
+  },
+  "messaging_features": {
+    "used": ["reply", "push", "multicast", "broadcast"],
+    "rate_limit_handling": "未実装",
+    "code_refs": [
+      "admin/app/routers/line_broadcast.py:29-143",
+      "admin/app/line_client.py:170-269"
+    ]
+  },
+  "profile_fields": {
+    "fields": ["userId", "displayName", "pictureUrl", "statusMessage"],
+    "storage": {
+      "type": "json",
+      "files": ["admin/line_users.json"],
+      "schema": ["id", "name", "pictureUrl", "tags", "createdAt", "updatedAt", "followedAt", "lastMessageAt"]
+    },
+    "code_refs": [
+      "admin/app/line_client.py:152-168",
+      "webhook_server.py:141-175"
+    ]
+  },
+  "rich_menus": {
+    "ids": [
+      {
+        "key": "menu_a",
+        "id": "richmenu-fa2687411d4f851c0a6dff090b145c78",
+        "default": true
+      },
+      {
+        "key": "menu_b",
+        "id": "richmenu-75b22a410b122ca8960cf272b36127c3",
+        "default": false
+      }
+    ],
+    "images": [
+      {"file": "menu_a.png", "size": "2500x843"},
+      {"file": "menu_b.png", "size": "2500x843"},
+      {"file": "menu_a_2500x1686.png", "size": "2500x1686"},
+      {"file": "menu_b_2500x1686.png", "size": "2500x1686"}
+    ],
+    "switch_rules": {
+      "A": ["A", "a", "メニューA", "メニューa"],
+      "B": ["B", "b", "メニューB", "メニューb"],
+      "toggle": ["チェンジ", "切り替え", "change"]
+    },
+    "code_refs": [
+      "rich_menu_ids.json:1-18",
+      "menu_switch_config.json:1-16",
+      "webhook_server.py:177-245"
+    ]
+  },
+  "libraries": {
+    "http": ["requests"],
+    "framework": ["fastapi", "uvicorn", "flask"],
+    "env_loader": ["python-dotenv"],
+    "line_sdk_used": false,
+    "init_refs": [
+      "webhook_server.py:1-15",
+      "admin/main.py:1-11",
+      "requirements.txt:1-20"
+    ]
+  },
+  "assets": {
+    "uploads_dir": "admin/uploads/",
+    "richmenu_images": ["menu_a.png", "menu_b.png", "menu_a_2500x1686.png", "menu_b_2500x1686.png"]
+  },
+  "db_like": {
+    "type": "json_files",
+    "files": [
+      "admin/line_users.json",
+      "admin/line_messages.json",
+      "admin/accounts.json",
+      "admin/line_broadcast_history.json"
+    ],
+    "keys": {
+      "users_pk": "id",
+      "messages_pk": "id"
+    }
+  },
+  "code_refs": [
+    ".env:1-13",
+    "admin/.env:1-6",
+    "webhook_server.py:1-287",
+    "admin/app/line_client.py:1-516",
+    "admin/app/routers/line_broadcast.py:1-143",
+    "rich_menu_ids.json:1-18",
+    "menu_switch_config.json:1-16"
+  ],
+  "assumptions": [
+    "WEBHOOK_EXTERNAL_URLは本番環境で設定される想定",
+    "LINE_BASIC_IDは現在未使用だが将来的に必要な可能性",
+    "署名検証は本番環境では必須（SKIP_WEBHOOK_SIGNATURE_VERIFICATION=false）",
+    ".envファイルの二重管理は段階的に統合される想定"
+  ]
+}
